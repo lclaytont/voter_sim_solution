@@ -26,7 +26,7 @@ class WorldUi
         when "d"
             puts "Delete something"
         else 
-            puts "Damn"
+            restart()
         end
     end
 
@@ -42,7 +42,7 @@ class WorldUi
     end
 
     def voter_or_politician_ud
-        puts "What would you like to update?"
+        puts "Whom would you like to update?"
         puts "(P)olitician or (V)oter"
     end
 
@@ -63,8 +63,18 @@ class WorldUi
         puts "Who would you like to update?"
     end 
 
-    def new_value 
+    def new_value_pol(x) 
         puts "What would you like the new value to be?"
+        case x.downcase
+        when "name"
+            val = gets.chomp 
+            return val 
+        when "party"
+            ask_party()
+            pick_party()
+        else 
+            restart()
+        end
     end
 
     def pick_politics
@@ -110,6 +120,20 @@ class WorldUi
             restart()
         end
     end
+    
+    def update_what_category_pol
+        puts "What would you like to update?"
+        puts "(N)ame or (P)arty"
+        choice = gets.chomp
+        case choice.downcase 
+        when "n"
+            return "name"
+        when "p"
+            return "party"
+        else 
+            restart()
+        end
+    end
 
     # Methods that call CRUD methods
     def voter_politician_create(person)
@@ -144,7 +168,13 @@ class WorldUi
             @world.update_voter(name, category, val)
             restart()
         when "p"
-            puts "Damn"
+            ask_name()
+            name = gets.chomp
+            category = update_what_category_pol()
+            val = new_value_pol(category)
+#             val = gets.chomp() 
+            @world.update_politician(name, category, val)
+            restart()
         else
             restart()
         end
