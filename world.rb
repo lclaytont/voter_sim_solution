@@ -109,7 +109,7 @@ class World
         end
 
         if person.nil? 
-            "There is no one to delete" 
+            puts "There is no one to delete" 
         else
             @voters.delete(person)
         end

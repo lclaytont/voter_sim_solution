@@ -24,7 +24,11 @@ class WorldUi
             entity = gets.chomp
             voter_politician_update(entity)
         when "d"
-            puts "Delete something"
+            ask_delete()
+            person = gets.chomp
+            voter_politician_delete(person)
+        when "q"
+            puts "Goodbye"
         else 
             restart()
         end
@@ -33,7 +37,7 @@ class WorldUi
     # Methods that trigger the script
     def opening_lines 
         puts "What would you like to do?"
-        puts "(C)reate, (L)ist, (U)pdate, (D)elete"
+        puts "(C)reate, (L)ist, (U)pdate, (D)elete, (Q)uit"
     end
 
     def voter_or_politician
@@ -63,6 +67,16 @@ class WorldUi
         puts "Who would you like to update?"
     end 
 
+    def ask_delete
+        puts "Whom would you like to delete"
+        puts "(P)olitician or (V)oter"
+    end
+
+    def confirm
+        puts "Are you sure"
+        puts "(Y)es or (N)o"
+    end
+
     def new_value_pol(x) 
         puts "What would you like the new value to be?"
         case x.downcase
@@ -72,6 +86,20 @@ class WorldUi
         when "party"
             ask_party()
             pick_party()
+        else 
+            restart()
+        end
+    end
+
+    def new_value_voter(x) 
+        puts "What would you like the new value to be?"
+        case x.downcase
+        when "name"
+            val = gets.chomp 
+            return val 
+        when "politics"
+            ask_politics()
+            pick_politics()
         else 
             restart()
         end
@@ -163,8 +191,7 @@ class WorldUi
             ask_name()
             name = gets.chomp
             category = update_what_category_voter()
-            new_value() 
-            val = gets.chomp() 
+            val = new_value_voter(category)
             @world.update_voter(name, category, val)
             restart()
         when "p"
@@ -172,10 +199,38 @@ class WorldUi
             name = gets.chomp
             category = update_what_category_pol()
             val = new_value_pol(category)
-#             val = gets.chomp() 
             @world.update_politician(name, category, val)
             restart()
         else
+            restart()
+        end
+    end
+
+    def voter_politician_delete(person)
+        case person.downcase 
+        when "v"
+            ask_name()
+            name = gets.chomp
+            confirm()
+            confirmation = gets.chomp 
+            if confirmation.downcase == "y" 
+                @world.delete_voter(name)
+            else
+                restart()
+            end
+            restart()
+        when "p"
+            ask_name()
+            name = gets.chomp
+            confirm()
+            confirmation = gets.chomp 
+            if confirmation.downcase == "y" 
+                @world.delete_politician(name)
+            else
+                restart()
+            end
+            restart()
+        else 
             restart()
         end
     end
